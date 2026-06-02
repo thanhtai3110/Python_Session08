@@ -1,362 +1,222 @@
-# 1. Phân tích và thiết kế giải pháp
-# 1.1. Phân tích Input / Output
-# Chức năng 1: Nhập dữ liệu sản phẩm và xem báo cáo thống kê
-
-# Input
-
-# shop_name (str)
-# product_name (str)
-# product_description (str)
-# category (str)
-# keywords (str, các từ khóa cách nhau bởi dấu phẩy)
-
-# Output
-
-# Tên shop đã chuẩn hóa khoảng trắng
-# Tên sản phẩm viết hoa chữ cái đầu mỗi từ
-# Mô tả đã chuẩn hóa
-# Độ dài mô tả
-# Danh mục viết thường
-# Danh sách từ khóa sau khi chuẩn hóa
-# Số lượng từ khóa
-# Mô tả chữ thường
-# Mô tả chữ hoa
-# Chức năng 2: Chuẩn hóa tên Shop
-
-# Input
-
-# shop_name (str)
-
-# Output
-
-# Tên shop ban đầu
-# Tên shop sau chuẩn hóa
-
-# Ví dụ:
-
-# Input:
-# " Rikkei Education Mall "
-
-# Output:
-# "shop-rikkei-education-mall"
-# Chức năng 3: Kiểm tra mã giảm giá
-
-# Input
-
-# discount_code (str)
-
-# Output
-
-# Thông báo hợp lệ hoặc lỗi cụ thể
-# Nếu hợp lệ thì thêm vào danh sách mã giảm giá
-# Chức năng 4: Tìm kiếm và thay thế từ khóa
-
-# Input
-
-# keyword_find (str)
-# keyword_replace (str)
-
-# Output
-
-# Số lần xuất hiện
-# Mô tả sau khi thay thế
-# Chức năng 5: Thoát
-
-# Output
-
-# Thoát chương trình
-# 1.2. Đề xuất giải pháp
-# Các phương thức xử lý chuỗi sử dụng
-# Hàm	Công dụng
-# strip()	Xóa khoảng trắng đầu cuối
-# title()	Viết hoa chữ cái đầu mỗi từ
-# lower()	Chuyển chữ thường
-# upper()	Chuyển chữ hoa
-# split()	Tách chuỗi
-# join()	Ghép chuỗi
-# replace()	Thay thế chuỗi
-# count()	Đếm số lần xuất hiện
-# startswith()	Kiểm tra chuỗi bắt đầu
-# isalnum()	Kiểm tra chữ và số
-# isdigit()	Kiểm tra nhập số menu
-# 1.3. Thuật toán (Pseudocode)
-# Khai báo:
-
-# shop_name = ""
-# product_name = ""
-# product_description = ""
-# category = ""
-# keywords = []
-# discount_codes = []
-
-# Lặp vô hạn:
-
-#     Hiển thị menu
-
-#     Nhập lựa chọn
-
-#     Nếu không phải số:
-#         Báo lỗi
-#         tiếp tục
-
-#     Nếu ngoài khoảng 1-5:
-#         Báo lỗi
-#         tiếp tục
-
-#     Nếu chọn 1:
-#         Nhập thông tin sản phẩm
-
-#         Kiểm tra shop rỗng
-#         Kiểm tra mô tả rỗng
-
-#         Chuẩn hóa dữ liệu
-
-#         Hiển thị báo cáo
-
-#     Nếu chọn 2:
-#         Chuẩn hóa tên shop
-
-#     Nếu chọn 3:
-#         Kiểm tra mã giảm giá
-
-#         Nếu hợp lệ:
-#             Thêm vào danh sách
-
-#     Nếu chọn 4:
-#         Tìm từ khóa trong mô tả
-
-#         Nếu tìm thấy:
-#             Thay thế
-#             Hiển thị kết quả
-
-#         Ngược lại:
-#             Thông báo không tìm thấy
-
-#     Nếu chọn 5:
-#         Thoát chương trình
-# 2. Source Code Python Hoàn Chỉnh
-# =====================================
-# HỆ THỐNG QUẢN LÝ THÔNG TIN SẢN PHẨM
-# =====================================
+# ====== KHOI TAO DU LIEU ======
 
 shop_name = ""
 product_name = ""
 product_description = ""
-category = ""
+product_category = ""
+keyword_list = []
+discount_code_list = []
 
-keywords = []
-discount_codes = []
+# ====== MENU ======
 
-
-# -------------------------------------
-# Hàm chuẩn hóa tên shop
-# -------------------------------------
-def normalize_shop_name(shop_name):
-    shop_name = shop_name.strip().lower()
-
-    shop_name = "-".join(shop_name.split())
-
-    if not shop_name.startswith("shop-"):
-        shop_name = "shop-" + shop_name
-
-    return shop_name
-
-
-# -------------------------------------
-# Hàm kiểm tra mã giảm giá
-# -------------------------------------
-def validate_discount_code(code):
-
-    code = code.strip()
-
-    if code == "":
-        return False, "Mã giảm giá không được rỗng"
-
-    if " " in code:
-        return False, "Mã giảm giá không được chứa khoảng trắng"
-
-    if len(code) < 6 or len(code) > 12:
-        return False, "Mã giảm giá phải có độ dài từ 6 đến 12 ký tự"
-
-    if not code.isupper():
-        return False, "Mã giảm giá phải viết hoa toàn bộ"
-
-    if not code.isalnum():
-        return False, "Mã giảm giá chỉ được chứa chữ cái và chữ số"
-
-    if not code.startswith("SALE"):
-        return False, "Mã giảm giá phải bắt đầu bằng SALE"
-
-    return True, "Mã giảm giá hợp lệ"
-
-
-# -------------------------------------
-# Menu chương trình
-# -------------------------------------
 while True:
 
-    print("\n========== MENU ==========")
-    print("1. Nhập dữ liệu sản phẩm và xem báo cáo")
-    print("2. Chuẩn hóa tên shop")
-    print("3. Kiểm tra mã giảm giá")
-    print("4. Tìm kiếm và thay thế từ khóa")
-    print("5. Thoát")
-    print("==========================")
+    print("\n========== HE THONG QUAN LY SAN PHAM ==========")
+    print("1. Nhap du lieu san pham va xem bao cao")
+    print("2. Chuan hoa ten Shop")
+    print("3. Kiem tra ma giam gia hop le")
+    print("4. Tim kiem va thay the tu khoa trong mo ta")
+    print("5. Thoat")
 
-    choice = input("Nhập lựa chọn: ").strip()
+    choice = input("Nhap lua chon: ")
 
-    # Bẫy 4
+    # EDGE CASE: menu khong phai so
     if not choice.isdigit():
-        print("Lựa chọn không hợp lệ. Vui lòng nhập từ 1 đến 5.")
+        print("Lua chon khong hop le!")
         continue
 
     choice = int(choice)
 
-    # Bẫy 3
-    if choice < 1 or choice > 5:
-        print("Lựa chọn không hợp lệ. Vui lòng nhập từ 1 đến 5.")
-        continue
+    match choice:
 
-    # =================================
-    # CHỨC NĂNG 1
-    # =================================
-    if choice == 1:
+        # ================= FUNCTION 1 =================
+        case 1:
 
-        shop_name = input("Nhập tên shop: ")
+            print("\n===== NHAP DU LIEU SAN PHAM =====")
 
-        # Bẫy 1
-        if shop_name.strip() == "":
-            print("Tên shop không được bỏ trống")
-            continue
+            shop_name = input("Nhap ten shop: ")
 
-        product_name = input("Nhập tên sản phẩm: ")
+            # EDGE CASE SHOP RONG
+            if shop_name.strip() == "":
+                print("Ten shop khong duoc bo trong")
+                continue
 
-        product_description = input("Nhập mô tả sản phẩm: ")
+            product_name = input("Nhap ten san pham: ")
 
-        # Bẫy 2
-        if product_description.strip() == "":
-            print("Mô tả sản phẩm không được rỗng")
-            continue
+            product_description = input("Nhap mo ta san pham: ")
 
-        category = input("Nhập danh mục sản phẩm: ")
+            # EDGE CASE MO TA RONG
+            if product_description.strip() == "":
+                print("Mo ta san pham khong duoc rong")
+                continue
 
-        keyword_input = input(
-            "Nhập danh sách từ khóa (cách nhau bởi dấu phẩy): "
-        )
+            product_category = input("Nhap danh muc san pham: ")
 
-        # Chuẩn hóa dữ liệu
-        shop_clean = shop_name.strip()
-
-        product_clean = product_name.strip().title()
-
-        description_clean = product_description.strip()
-
-        category_clean = category.strip().lower()
-
-        keywords = [
-            keyword.strip()
-            for keyword in keyword_input.split(",")
-            if keyword.strip() != ""
-        ]
-
-        print("\n===== BÁO CÁO THỐNG KÊ =====")
-
-        print("Tên shop:", shop_clean)
-
-        print("Tên sản phẩm:", product_clean)
-
-        print("Mô tả sản phẩm:", description_clean)
-
-        print("Độ dài mô tả:", len(description_clean))
-
-        print("Danh mục:", category_clean)
-
-        print("Danh sách từ khóa:", keywords)
-
-        print("Số lượng từ khóa:", len(keywords))
-
-        print("Mô tả chữ thường:")
-        print(description_clean.lower())
-
-        print("Mô tả chữ hoa:")
-        print(description_clean.upper())
-
-    # =================================
-    # CHỨC NĂNG 2
-    # =================================
-    elif choice == 2:
-
-        shop_input = input("Nhập tên shop: ")
-
-        if shop_input.strip() == "":
-            print("Tên shop không được bỏ trống")
-            continue
-
-        normalized_shop = normalize_shop_name(shop_input)
-
-        print("Tên shop ban đầu:", shop_input)
-
-        print("Tên shop chuẩn hóa:", normalized_shop)
-
-    # =================================
-    # CHỨC NĂNG 3
-    # =================================
-    elif choice == 3:
-
-        code = input("Nhập mã giảm giá: ")
-
-        is_valid, message = validate_discount_code(code)
-
-        if is_valid:
-
-            discount_codes.append(code)
-
-            print("Mã giảm giá hợp lệ")
-
-            print("Danh sách mã giảm giá hiện tại:")
-
-            for discount_code in discount_codes:
-                print("-", discount_code)
-
-        else:
-            print(message)
-
-    # =================================
-    # CHỨC NĂNG 4
-    # =================================
-    elif choice == 4:
-
-        if product_description.strip() == "":
-            print("Chưa có mô tả sản phẩm.")
-            continue
-
-        keyword_find = input("Nhập từ khóa cần tìm: ")
-
-        keyword_replace = input("Nhập từ khóa thay thế: ")
-
-        count = product_description.count(keyword_find)
-
-        if count > 0:
-
-            new_description = product_description.replace(
-                keyword_find,
-                keyword_replace
+            keywords = input(
+                "Nhap danh sach tu khoa (cach nhau boi dau phay): "
             )
 
-            print("Số lần xuất hiện của từ khóa:", count)
+            # ===== XU LY =====
 
-            print("Mô tả sau khi thay thế:")
-            print(new_description)
+            clean_shop = shop_name.strip()
 
-            product_description = new_description
+            clean_product = product_name.strip().title()
 
-        else:
-            print("Không tìm thấy từ khóa trong mô tả sản phẩm.")
+            clean_description = product_description.strip()
 
-    # =================================
-    # CHỨC NĂNG 5
-    # =================================
-    elif choice == 5:
+            description_length = len(clean_description)
 
-        print("Thoát chương trình")
-        break
+            clean_category = " ".join(
+                product_category.strip().split()
+            ).lower()
+
+            keyword_list = []
+
+            for keyword in keywords.split(","):
+                keyword = keyword.strip()
+
+                if keyword != "":
+                    keyword_list.append(keyword)
+
+            description_lower = clean_description.lower()
+            description_upper = clean_description.upper()
+
+            # ===== BAO CAO =====
+
+            print("\n===== BAO CAO THONG KE =====")
+
+            print("Ten shop:", clean_shop)
+
+            print("Ten san pham:", clean_product)
+
+            print("Mo ta:", clean_description)
+
+            print("Do dai mo ta:", description_length)
+
+            print("Danh muc:", clean_category)
+
+            print("Danh sach tu khoa:", keyword_list)
+
+            print("So luong tu khoa:", len(keyword_list))
+
+            print("Mo ta chu thuong:")
+            print(description_lower)
+
+            print("Mo ta chu hoa:")
+            print(description_upper)
+
+        # ================= FUNCTION 2 =================
+        case 2:
+
+            print("\n===== CHUAN HOA TEN SHOP =====")
+
+            original_shop = input("Nhap ten shop: ")
+
+            if original_shop.strip() == "":
+                print("Ten shop khong duoc bo trong")
+                continue
+
+            normalized_shop = original_shop.strip()
+
+            normalized_shop = normalized_shop.lower()
+
+            normalized_shop = "-".join(
+                normalized_shop.split()
+            )
+
+            if not normalized_shop.startswith("shop-"):
+                normalized_shop = "shop-" + normalized_shop
+
+            print("Ten shop ban dau:", original_shop)
+
+            print("Ten shop sau chuan hoa:",
+                  normalized_shop)
+
+        # ================= FUNCTION 3 =================
+        case 3:
+
+            print("\n===== KIEM TRA MA GIAM GIA =====")
+
+            discount_code = input("Nhap ma giam gia: ")
+
+            if discount_code == "":
+                print("Ma giam gia khong duoc rong")
+
+            elif " " in discount_code:
+                print("Ma giam gia khong duoc chua khoang trang")
+
+            elif len(discount_code) < 6 or len(discount_code) > 12:
+                print("Do dai phai tu 6 den 12 ky tu")
+
+            elif discount_code != discount_code.upper():
+                print("Ma phai viet hoa toan bo")
+
+            elif not discount_code.isalnum():
+                print("Chi duoc chua chu cai va chu so")
+
+            elif not discount_code.startswith("SALE"):
+                print("Ma phai bat dau bang SALE")
+
+            else:
+
+                print("Ma giam gia hop le")
+
+                discount_code_list.append(
+                    discount_code
+                )
+
+                print("Danh sach ma giam gia:")
+
+                print(discount_code_list)
+
+        # ================= FUNCTION 4 =================
+        case 4:
+
+            print("\n===== TIM KIEM VA THAY THE =====")
+
+            if product_description.strip() == "":
+                print("Chua co mo ta san pham.")
+                continue
+
+            find_keyword = input(
+                "Nhap tu khoa can tim: "
+            )
+
+            replace_keyword = input(
+                "Nhap tu khoa thay the: "
+            )
+
+            current_description = product_description.strip()
+
+            if find_keyword in current_description:
+
+                count_keyword = current_description.count(
+                    find_keyword
+                )
+
+                new_description = current_description.replace(
+                    find_keyword,
+                    replace_keyword
+                )
+
+                print("So lan xuat hien:",
+                      count_keyword)
+
+                print("Mo ta sau thay the:")
+
+                print(new_description)
+
+            else:
+                print("Khong tim thay tu khoa.")
+
+        # ================= FUNCTION 5 =================
+        case 5:
+
+            print("Thoat chuong trinh")
+
+            break
+
+        # ================= EDGE CASE =================
+        case _:
+
+            print("Lua chon khong hop le!")
